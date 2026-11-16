@@ -1,0 +1,43 @@
+name: Sync Substack posts
+
+on:
+  schedule:
+    - cron: "17 * * * *"   # every hour
+  workflow_dispatch:        # "Run workflow" button for an immediate check
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: substack-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Add new Substack posts
+        run: python sync_substack.py
+      - name: Publish changes
+        run: |
+          if git diff --quiet; then
+            echo "Nothing new."
+            exit 0
+          fi
+          git config user.name "Falconer bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add posts.json index.html
+          git commit -m "Add new Substack post(s)"
+          git push
+          echo "changed=yes" >> "$GITHUB_OUTPUT"
+        id: publish
+      - name: Rebuild the website
+        if: steps.publish.outputs.changed == 'yes'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
