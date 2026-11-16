@@ -157,6 +157,10 @@ nav.main .wrap{display:flex;align-items:center;gap:6px;min-height:60px;flex-wrap
 .aph small{display:block;color:var(--muted);font-size:12.5px;margin-top:6px}
 .aph-h{font-family:var(--head);text-transform:uppercase;font-weight:500;font-size:22px;margin:30px 0 6px;color:var(--accent2)}
 .aph-sub{font-family:var(--serif);color:#cfcac0;margin:0 0 16px;font-size:16.5px}
+.cta{margin-top:26px;padding:22px 24px;background:#211d17;border-left:3px solid var(--accent2)}
+.cta p{font-family:var(--sans);font-size:15px;color:#d8d2c6;margin:0 0 14px}
+.cta-btn{background:var(--accent);border-color:var(--accent);color:#fff;font-size:17px;padding:10px 20px}
+.cta-btn:hover{background:#d0402f;border-color:#d0402f}
 footer{background:#0c0c0c;margin-top:40px;padding:40px 0 20px;color:var(--muted)}
 footer .cols{display:grid;grid-template-columns:2fr 1fr 1fr;gap:30px}
 footer h5{font-family:var(--head);font-size:16px;text-transform:uppercase;color:var(--text);margin:0 0 12px;font-weight:500}
@@ -281,7 +285,7 @@ const PH = `<p>This is placeholder text so you can see how an article page reads
 <blockquote>A pulled quotation or an aphorism looks like this.</blockquote>
 <p>When the article ends, readers see links to the previous and next pieces, and the article is filed automatically under its section and in the monthly archive.</p>`;
 
-const POSTS = [
+/*POSTS_START*/const POSTS = [
  {
   "slug": "closing-preamble-manuscript",
   "title": "Closing Preamble: Manuscript",
@@ -359,7 +363,7 @@ const POSTS = [
   "excerpt": "Plato, one of the great saints of Western philosophy, lived almost 2,500 years ago.",
   "body": "<p>Plato, one of the great saints of Western philosophy, lived almost 2,500 years ago. His words, through his own works or through writing down the words of his teacher, Socrates, still influence many to this day and continue to enlighten others on the beauty of classical philosophy. Among the many things Plato discussed in his time—mainly, what virtue is and whether it can be taught, the ideal government structure, how leaders should function, or how we understand the metaphysical realm—one sticks out to me the most. My first introduction to this concept was in Plato’s Socratic dialogue, the Phaedo, where, among the many things discussed, I first heard about the concept of Forms as Plato describes it.<\/p><p>Beauty, apparent in some things to some and apparent in other things to others—can its true nature be pinpointed? And if it can be, then what exactly is it, to be precise? These are among a few of the questions raised in the Phaedo. Although we recognise beauty through many different things, Plato’s idea suggests that these beautiful things may share in something higher and more perfect than themselves. We find many things beautiful, and those things are often different for different people, yet they may still direct us towards a greater Form of Beauty.<\/p><p>How does this tie into relationships, though? So far, we have discussed only, in a very basic sense, the ideas surrounding Platonic Forms. My proposition is quite simple: as it concerns the Form of Beauty, relationships, for the majority of history, have been seen as something which may participate in or guide us towards it—something which, for the majority of the history of mankind, has enticed us, been the stage of tragedy and hope, helped us understand ourselves, and allowed us to experience parts of ourselves we never knew before.<\/p><p>Although, if one has been paying attention, one would realise that I said “the majority” of history. That is to say, there is something about modern relationships which actually leads people to have an aversion to them as they are currently portrayed in social life and popular media—something which dilutes the beauty found within relationships and leads people to view them with antipathy.<\/p><p>What has caused the average person to experience a heinous erosion in his love for relationships? Is it feminism? Is it the economy? Is it the crisis of morality? Throughout the Western world, since the 1970s, there has been a large uptick in divorces, remarriages, and people who remain single without children. Among the youth of Generation Z, many feel a quiet resentment towards the era’s culture: one-night hookups, sneaky links, situationships, unfaithful relationships, and relationships ending explosively.<\/p><p>Is it a coincidence that the generation—Generation Z—which follows Generation X, who normalised divorced parents, broken homes, and separated families, subsequently has the highest rates of loneliness and feelings of having no meaning in life? Could these two be contingent on one another?<\/p><p>These are merely thoughts on the era of history in which many find themselves: the 2020s. Some say this is merely a repeat of the fall of any civilisation, nothing new in history. Others say it is the eerie death creak of a world which no longer exists. Furthermore, what that entails is that this is how it will always be from now on: relationships forever being discarded as something no longer to be heralded as beautiful, no longer something capable of guiding us towards the Form of Beauty. Plato would be turning in his grave.<\/p>"
  }
-];
+];/*POSTS_END*/
 
 /* Aphorisms page. own:true = your own words; own:false = a quotation from someone else. */
 const NOTES = [
@@ -601,6 +605,7 @@ function article(p){
     <div class="cover" style="margin-top:20px">${cover(p)}</div>
     ${p.sample?`<div class="note">This is a sample post showing the layout. It will be replaced with your own writing before the site goes live.</div>`:""}
     <div class="body">${p.body||PH}</div>
+    ${p.substack?`<div class="cta"><p>This is the opening of the piece. The full text is on Substack.</p><a class="readmore cta-btn" href="${esc(p.substack)}">Continue reading on Substack →</a></div>`:""}
     <div class="prevnext"><div>${prev?`<small>Previous</small><a href="${link(prev)}">${esc(prev.title)}</a>`:""}</div>
       <div style="text-align:right">${next?`<small>Next</small><a href="${link(next)}">${esc(next.title)}</a>`:""}</div></div>
   </div>`;
