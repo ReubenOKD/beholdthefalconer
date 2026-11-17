@@ -233,6 +233,7 @@ footer .copy{border-top:1px solid #222;margin-top:30px;padding-top:16px;font-siz
       <li><a href="#power" data-nav="power">Power &amp; Persuasion</a></li>
       <li><a href="#media" data-nav="media">Media &amp; Myth</a></li>
       <li><a href="#aphorisms" data-nav="aphorisms">Aphorisms</a></li>
+      <li><a href="#software" data-nav="software">Software</a></li>
       <li><a href="#archive" data-nav="archive">Archives ▾</a><div class="drop" id="archdrop"></div></li>
       <li><a href="#about" data-nav="about">About / Contact</a></li>
     </ul>
@@ -254,7 +255,7 @@ footer .copy{border-top:1px solid #222;margin-top:30px;padding-top:16px;font-siz
         <p style="font-family:var(--serif);font-size:16px;max-width:460px;margin:0">An independent journal of serious, exploratory writing — reading the pattern, not only the event. Attention before reaction. Argument before slogan. Memory before novelty.</p>
       </div>
       <div><h5>Sections</h5><a href="#metaphysics">Metaphysics &amp; Meaning</a><a href="#power">Power &amp; Persuasion</a><a href="#media">Media &amp; Myth</a></div>
-      <div><h5>Journal</h5><a href="#aphorisms">Aphorisms</a><a href="#archive">Archives</a><a href="#about">About / Contact</a></div>
+      <div><h5>Journal</h5><a href="#aphorisms">Aphorisms</a><a href="#software">Software</a><a href="#archive">Archives</a><a href="#about">About / Contact</a></div>
     </div>
     <div class="copy"><span>© <span id="yr"></span> Behold the Falconer. All rights reserved.</span><span>Independent writing · Vol. I</span></div>
   </div>
@@ -616,6 +617,21 @@ function about(){
       <p>Follow and write to the journal on Substack: <a href="https://beholdthefalconer.substack.com" style="color:var(--accent2)">beholdthefalconer.substack.com</a>.</p>
     </div></div></section>${sidebar()}</div>`;
 }
+const PRODUCTS = [
+  {name:"Shielded", platform:"Mac", status:"Coming soon",
+   text:"Locks your ad blocker on for a set time, so it can't be switched off on a whim. Works with AdGuard and similar blockers."},
+  {name:"LinkPlay", platform:"iPhone", status:"Coming soon",
+   text:"A video app in the style of YouTube, with Shorts blocked so you watch what you chose to watch."}
+];
+function software(){
+  return `<div class="mainrow" style="margin-top:24px"><section>
+    <div class="pagehead"><h1>Software</h1><p>Small, focused programs from the Falconer's workshop.</p></div>
+    <div class="aph-grid">${PRODUCTS.map(p=>`<div class="aph"><h3 style="font-family:var(--head);font-size:22px;margin:0 0 4px">${esc(p.name)}</h3>
+      <p style="margin:0 0 10px"><span class="sample" style="margin-left:0">${esc(p.platform)}</span><span class="sample">${esc(p.status)}</span></p>
+      <p>${esc(p.text)}</p></div>`).join("")}</div>
+    <p class="aph-sub" style="margin-top:24px">More programs will be added here as they are finished. To ask about a release, write via <a href="#about" style="color:var(--accent2)">About / Contact</a>.</p>
+    </section>${sidebar()}</div>`;
+}
 function aphorisms(){
   const card = (n,q) => `<div class="aph${q?" q":""}">${n.text.split(/\n\s*\n/).map(t=>`<p>${esc(t.trim()).replace(/\n/g,"<br>")}</p>`).join("")}<small>${fmt(n.date)}</small></div>`;
   return `<div class="mainrow" style="margin-top:24px"><section>
@@ -657,6 +673,7 @@ function render(){
   else if(h==="archive") html = archive();
   else if(h==="about") html = about();
   else if(h==="aphorisms") html = aphorisms();
+  else if(h==="software") html = software();
   else { const p = POSTS.find(x=>x.slug===h); if(p){ html = article(p); nav = p.cat } else { html = home(); nav="home" } }
   app.innerHTML = html;
   document.querySelectorAll("[data-nav]").forEach(a=>a.classList.toggle("active", a.dataset.nav===nav));
