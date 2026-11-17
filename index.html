@@ -618,8 +618,15 @@ function about(){
     </div></div></section>${sidebar()}</div>`;
 }
 const PRODUCTS = [
-  {name:"Shielded", platform:"Mac", status:"Coming soon",
-   text:"Locks your ad blocker on for a set time, so it can't be switched off on a whim. Works with AdGuard and similar blockers."},
+  {name:"Shielded for Mac", platform:"Mac", status:"US$19 · one-time",
+   text:"Locks your ad blocker or Cloudflare's family filter on for a time you choose, from 30 minutes to a week, so it can't be switched off on a whim. Menu bar app for Apple silicon and Intel Macs (macOS 13 or later). Includes a licence key.",
+   url:"https://buy.polar.sh/polar_cl_HHmI3asW1H44ZDiIgtMCScOd15tTWaWcM5HZq0HlSMg", cta:"Buy for Mac"},
+  {name:"Shielded for Windows", platform:"Windows", status:"US$15 · one-time",
+   text:"The same two locks for Windows 10 and 11: the family filter, or keep your ad blocker running. Sits by the clock and runs in the background. Download the installer straight after purchase.",
+   url:"https://buy.polar.sh/polar_cl_8Vy78ReRqUIAKYTXfChcfIE9kPM5xOqCzBJee29yHiM", cta:"Buy for Windows"},
+  {name:"Shielded for Mac + Windows", platform:"Mac + Windows", status:"US$29 · one-time",
+   text:"Both versions, for anyone who works across two computers: a Mac licence key and the Windows installer.",
+   url:"https://buy.polar.sh/polar_cl_VjQwphL1EBoLX5TvdUSr8UWyFYyoKBArBR0tQ3pU4o6", cta:"Buy both"},
   {name:"LinkPlay", platform:"iPhone", status:"Coming soon",
    text:"A video app in the style of YouTube, with Shorts blocked so you watch what you chose to watch."}
 ];
@@ -628,7 +635,7 @@ function software(){
     <div class="pagehead"><h1>Software Programs for Sale</h1><p>Small, focused programs from the Falconer's workshop.</p></div>
     <div class="aph-grid">${PRODUCTS.map(p=>`<div class="aph"><h3 style="font-family:var(--head);font-size:22px;margin:0 0 4px">${esc(p.name)}</h3>
       <p style="margin:0 0 10px"><span class="sample" style="margin-left:0">${esc(p.platform)}</span><span class="sample">${esc(p.status)}</span></p>
-      <p>${esc(p.text)}</p></div>`).join("")}</div>
+      <p>${esc(p.text)}</p>${p.url?`<a class="readmore" href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.cta||"Buy now")}</a>`:""}</div>`).join("")}</div>
     <p class="aph-sub" style="margin-top:24px">More programs will be added here as they are finished. To ask about a release, write via <a href="#about" style="color:var(--accent2)">About / Contact</a>.</p>
     </section>${sidebar()}</div>`;
 }
