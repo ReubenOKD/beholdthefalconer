@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Back page - Behold the Falconer</title>
+<style>
+:root{--bg:#141414;--p1:#1e1e1e;--p2:#262626;--line:#333;--text:#e9e6df;--mut:#a29d93;--red:#b8322a;--gold:#c9a24a;--blue:#2f6fb0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Arial,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:22px 16px 80px}
+h1{font-size:26px;letter-spacing:.06em;text-transform:uppercase;margin:6px 0 2px}
+h1 span{color:var(--gold)}
+h2{font-size:17px;text-transform:uppercase;letter-spacing:.05em;margin:26px 0 10px;color:var(--gold)}
+.sub{color:var(--mut);margin:0 0 18px}
+.panel{background:var(--p1);border:1px solid var(--line);border-radius:6px;padding:16px;margin:14px 0}
+label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px;text-transform:uppercase;letter-spacing:.04em}
+input[type=text],input[type=url],input[type=date],input[type=password],select,textarea{width:100%;background:var(--p2);color:var(--text);border:1px solid var(--line);border-radius:4px;padding:10px;font:inherit}
+textarea{min-height:90px;resize:vertical}
+textarea.big{min-height:340px;font-family:Georgia,serif;font-size:16px;line-height:1.6}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row>div{flex:1;min-width:180px}
+button{background:var(--red);color:#fff;border:0;border-radius:4px;padding:11px 18px;font:inherit;font-weight:600;cursor:pointer}
+button.alt{background:var(--p2);border:1px solid var(--line);color:var(--text)}
+button.sm{padding:6px 10px;font-size:13px}
+button:disabled{opacity:.5;cursor:wait}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--line);margin:12px 0}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;border-radius:0;color:var(--mut);padding:10px 14px;text-transform:uppercase;letter-spacing:.05em}
+.tabs button.on{color:var(--text);border-bottom-color:var(--red)}
+.item{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item .t{flex:1;min-width:0}.item .t b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .t small{color:var(--mut)}
+.item .btns{display:flex;gap:6px;flex-shrink:0}
+.msg{padding:10px 12px;border-radius:4px;margin:8px 0;background:var(--p2);border-left:4px solid var(--blue);white-space:pre-wrap;word-break:break-word}
+.msg.ok{border-color:#3a9a55}.msg.err{border-color:var(--red)}
+.hint{color:var(--mut);font-size:13px;margin:4px 0}
+#log{position:sticky;bottom:0;margin-top:20px}
+.preview{background:#141414;border:1px solid var(--line);border-radius:6px;padding:18px;margin-top:12px;max-height:520px;overflow:auto;font-family:Georgia,serif;font-size:18px;line-height:1.7}
+.preview h2{color:var(--text);font-size:24px;text-transform:none;letter-spacing:0;margin:1.4em 0 .5em}
+.preview p.sep{text-align:center;color:var(--gold);letter-spacing:.4em}
+[hidden]{display:none!important}
+code{background:var(--p2);padding:1px 5px;border-radius:3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Behold the <span>Falconer</span> - back page</h1>
+<p class="sub">Add and change things on the site from here. Nothing is shown to visitors until you press Publish, and changes go live in about a minute.</p>
+
+<div class="panel" id="gate">
+ <b>First time on this device?</b>
+ <p class="hint">Paste your GitHub access key once. It stays only in this browser (never on the site). To make one: GitHub &rarr; Settings &rarr; Developer settings &rarr; Personal access tokens &rarr; Fine-grained tokens &rarr; Generate new token. Choose "Only select repositories" &rarr; <code>beholdthefalconer</code>, then under Permissions set <b>Contents</b> to <b>Read and write</b>. Pick the longest expiry offered.</p>
+ <label for="tok">Access key</label>
+ <input type="password" id="tok" placeholder="github_pat_..." autocomplete="off">
+ <p><button id="saveTok">Save and check</button> <button class="alt" id="forgetTok">Forget key on this device</button></p>
+</div>
+
+<div id="app" hidden>
+ <div class="tabs" id="tabs">
+  <button data-t="articles" class="on">Articles</button>
+  <button data-t="aph">Aphorisms</button>
+  <button data-t="soft">Software</button>
+  <button data-t="sup">Support</button>
+ </div>
+
+ <div id="t_articles">
+  <div class="panel">
+   <b id="a_mode">New article</b>
+   <label for="a_title">Title</label><input type="text" id="a_title">
+   <div class="row">
+    <div><label for="a_cat">Section</label>
+     <select id="a_cat"><option value="metaphysics">I. Metaphysics &amp; Meaning</option><option value="power">II. Power &amp; Persuasion</option><option value="media">III. Media &amp; Myth</option></select></div>
+    <div><label for="a_date">Date</label><input type="date" id="a_date"></div>
+   </div>
+   <label><input type="checkbox" id="a_feat"> Show in the Main Feature slider on the home page</label>
+   <label for="a_ex">Short description (optional - made from the first paragraph if empty)</label><textarea id="a_ex" style="min-height:64px"></textarea>
+   <label for="a_fmt">How you are typing it</label>
+   <select id="a_fmt"><option value="plain">Plain text (easy)</option><option value="html">HTML (for editing an existing article)</option></select>
+   <p class="hint" id="a_fmthint">Leave a blank line between paragraphs. A line with only <code>*</code> makes a section break. Start a line with <code>## </code> for a chapter heading, or <code>### </code> for a smaller one. Put <code>*asterisks*</code> around words to italicise them.</p>
+   <label for="a_body">Text</label><textarea id="a_body" class="big"></textarea>
+   <div class="row">
+    <div><label for="a_img">Cover drawing (optional - leave empty for the automatic cover)</label><input type="file" id="a_img" accept="image/*"></div>
+    <div><label for="a_slug">Web address ending</label><input type="text" id="a_slug" placeholder="made from the title"></div>
+   </div>
+   <p><button id="a_pub">Publish article</button> <button class="alt" id="a_prev">Preview</button> <button class="alt" id="a_clear">Start a new one</button></p>
+   <div class="preview" id="a_preview" hidden></div>
+  </div>
+  <h2>Articles on the site</h2>
+  <div class="panel" id="a_list">Loading...</div>
+ </div>
+
+ <div id="t_aph" hidden>
+  <div class="panel">
+   <b>New aphorism</b>
+   <div class="row">
+    <div><label for="n_own">Whose words</label><select id="n_own"><option value="1">Mine (From the Falconer)</option><option value="0">A quotation (Commonplace Book)</option></select></div>
+    <div><label for="n_date">Date</label><input type="date" id="n_date"></div>
+   </div>
+   <label for="n_text">Text (type the quotation marks yourself if you want them)</label><textarea id="n_text"></textarea>
+   <p><button id="n_pub">Publish aphorism</button></p>
+  </div>
+  <h2>On the site</h2>
+  <div class="panel" id="n_list">Loading...</div>
+ </div>
+
+ <div id="t_soft" hidden>
+  <div class="panel">
+   <b id="s_mode">New software card</b>
+   <div class="row">
+    <div><label for="s_name">Name</label><input type="text" id="s_name"></div>
+    <div><label for="s_plat">Platform</label><input type="text" id="s_plat" placeholder="Mac, Windows, iPhone"></div>
+   </div>
+   <label for="s_status">Price or status line</label><input type="text" id="s_status" placeholder="US$19 - one-time, or Coming soon">
+   <label for="s_text">Description</label><textarea id="s_text"></textarea>
+   <div class="row">
+    <div><label for="s_url">Buy link (leave empty if not for sale yet)</label><input type="url" id="s_url"></div>
+    <div><label for="s_cta">Button words</label><input type="text" id="s_cta" placeholder="Buy for Mac"></div>
+   </div>
+   <p><button id="s_pub">Save software card</button> <button class="alt" id="s_clear">Start a new one</button></p>
+  </div>
+  <h2>On the Software page</h2>
+  <div class="panel" id="s_list">Loading...</div>
+ </div>
+
+ <div id="t_sup" hidden>
+  <div class="panel">
+   <b>Add a support button</b>
+   <div class="row">
+    <div><label for="u_name">Name</label><input type="text" id="u_name" placeholder="PayPal, Buy Me a Coffee"></div>
+    <div><label for="u_url">Link</label><input type="url" id="u_url"></div>
+   </div>
+   <label for="u_note">Short note (optional)</label><input type="text" id="u_note" placeholder="One-off or monthly">
+   <p><button id="u_pub">Add support button</button></p>
+  </div>
+  <h2>On the Support page</h2>
+  <div class="panel" id="u_list">Loading...</div>
+ </div>
+</div>
+
+<div id="log"></div>
+</div>
+
+<script>
+var $=function(s){return document.querySelector(s)};
+var REPO='ReubenOKD/beholdthefalconer',BR='main',API='https://api.github.com/repos/'+REPO+'/contents/';
+function H(extra){var h={'Authorization':'Bearer '+(localStorage.getItem('falconer_token')||''),'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};for(var k in extra)h[k]=extra[k];return h;}
+function log(m,cls){var d=document.createElement('div');d.className='msg '+(cls||'');d.textContent=m;$('#log').prepend(d);}
+function bytesToB64(by){var s='',CH=0x8000;for(var i=0;i<by.length;i+=CH){s+=String.fromCharCode.apply(null,by.subarray(i,i+CH));}return btoa(s);}
+function textToB64(t){return bytesToB64(new TextEncoder().encode(t));}
+function b64ToText(b){var bin=atob(b.replace(/\s/g,''));var by=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)by[i]=bin.charCodeAt(i);return new TextDecoder().decode(by);}
+function J(s){return JSON.stringify(s==null?'':String(s));}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function inl(s){return esc(s).replace(/\*([^*\n]+)\*/g,'<em>$1</em>');}
+function strip(h){var d=document.createElement('div');d.innerHTML=h;return (d.textContent||'').replace(/\s+/g,' ').trim();}
+function today(){return new Date().toLocaleDateString('en-CA');}
+function slugify(s){return s.toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80);}
+function busy(btn,on){if(btn)btn.disabled=on;}
+
+async function getFile(path){
+ var r=await fetch(API+path+'?ref='+BR+'&t='+Date.now(),{headers:H()});
+ if(!r.ok)throw new Error('Could not read '+path+' ('+r.status+'). '+(r.status===401?'The access key is wrong or expired.':''));
+ var j=await r.json(),text;
+ if(j.content&&j.encoding==='base64'){text=b64ToText(j.content);}
+ else{var rr=await fetch(API+path+'?ref='+BR+'&t='+Date.now(),{headers:H({'Accept':'application/vnd.github.raw+json'})});text=await rr.text();}
+ return {sha:j.sha,text:text};
+}
+async function getSha(path){var r=await fetch(API+path+'?ref='+BR+'&t='+Date.now(),{headers:H()});if(r.status===404)return null;if(!r.ok)throw new Error('Could not check '+path+' ('+r.status+')');return (await r.json()).sha;}
+async function putFile(path,b64,sha,msg){
+ var body={message:msg,content:b64,branch:BR};if(sha)body.sha=sha;
+ var r=await fetch(API+path,{method:'PUT',headers:H({'Content-Type':'application/json'}),body:JSON.stringify(body)});
+ if(!r.ok){var t=await r.text();throw new Error('Save failed ('+r.status+'): '+t.slice(0,300));}
+ return r.json();
+}
+function checkSyntax(t){var re=/<script>([\s\S]*?)<\/script>/g,m;while((m=re.exec(t))){new Function(m[1]);}}
+async function editSite(mut,msg){
+ var f=await getFile('index.html');
+ var nt=mut(f.text);
+ if(nt===f.text)throw new Error('Nothing changed.');
+ checkSyntax(nt);
+ await putFile('index.html',textToB64(nt),f.sha,msg);
+ return nt;
+}
+
+/* ---- readers/writers for each block in index.html ---- */
+var PS='/*POSTS_START*/const POSTS = ',PE=';/*POSTS_END*/';
+function readPosts(t){var a=t.indexOf(PS),b=t.indexOf(PE);if(a<0||b<0)throw new Error('Cannot find the articles block.');return JSON.parse(t.slice(a+PS.length,b));}
+function writePosts(t,arr){var a=t.indexOf(PS),b=t.indexOf(PE);return t.slice(0,a+PS.length)+JSON.stringify(arr,null,1).replace(/<\//g,'<\\/')+t.slice(b);}
+function coverBounds(t){var k='const COVER_IMG=',a=t.indexOf(k),b=t.indexOf(';\nfunction cover',a);if(a<0||b<0)throw new Error('Cannot find the cover list.');return [a+k.length,b];}
+function readCover(t){var x=coverBounds(t);return JSON.parse(t.slice(x[0],x[1]));}
+function writeCover(t,o){var x=coverBounds(t);return t.slice(0,x[0])+JSON.stringify(o)+t.slice(x[1]);}
+function notesBounds(t){var k='const NOTES = ',a=t.indexOf(k),b=t.indexOf('\n];',a);if(a<0||b<0)throw new Error('Cannot find the aphorisms.');return [a+k.length,b+2];}
+function readNotes(t){var x=notesBounds(t);return JSON.parse(t.slice(x[0],x[1]));}
+function writeNotes(t,arr){var x=notesBounds(t);return t.slice(0,x[0])+JSON.stringify(arr,null,1)+t.slice(x[1]);}
+function prodBounds(t){var k='const PRODUCTS = ',a=t.indexOf(k),b=t.indexOf('\n];',a);if(a<0||b<0)throw new Error('Cannot find the software list.');return [a+k.length,b+2];}
+function readProducts(t){var x=prodBounds(t);return (new Function('return '+t.slice(x[0],x[1])))();}
+function fmtProduct(p){
+ var order=['name','platform','status','text','url','cta'],parts=[],k;
+ order.forEach(function(key){if(p[key]!=null&&p[key]!=='')parts.push(key+':'+J(p[key]));});
+ for(k in p){if(order.indexOf(k)<0&&p[k]!=null&&p[k]!=='')parts.push(k+':'+JSON.stringify(p[k]));}
+ return '  {'+parts.join(',\n   ')+'}';
+}
+function writeProducts(t,arr){var x=prodBounds(t);return t.slice(0,x[0])+'[\n'+arr.map(fmtProduct).join(',\n')+'\n]'+t.slice(x[1]);}
+function supBounds(t){
+ var m1='/*SUP_START*/',m2='/*SUP_END*/',a=t.indexOf(m1);
+ if(a>=0){var b=t.indexOf(m2,a);return [a+m1.length,b,false];}
+ var k='const SUPPORT_LINKS = [];',i=t.indexOf(k);
+ if(i<0)throw new Error('Cannot find the support list.');
+ return [i+'const SUPPORT_LINKS = '.length,i+k.length-1,true];
+}
+function readSupport(t){var x=supBounds(t);return JSON.parse(t.slice(x[0],x[1]));}
+function writeSupport(t,arr){var x=supBounds(t),body=JSON.stringify(arr,null,1);
+ if(x[2])return t.slice(0,x[0])+'/*SUP_START*/'+body+'/*SUP_END*/'+t.slice(x[1]);
+ return t.slice(0,x[0])+body+t.slice(x[1]);}
+
+/* ---- gate ---- */
+async function testToken(){
+ var r=await fetch('https://api.github.com/repos/'+REPO,{headers:H()});
+ if(!r.ok)throw new Error('GitHub said '+r.status+'. Check the key was made for the beholdthefalconer repository with Contents: Read and write.');
+ var j=await r.json();
+ if(!j.permissions||!j.permissions.push)throw new Error('This key can read the site but not change it. Re-create it with Contents set to Read and write.');
+ return true;
+}
+async function enter(){
+ try{await testToken();}catch(e){$('#app').hidden=true;$('#gate').hidden=false;log(e.message,'err');return;}
+ $('#gate').hidden=true;$('#app').hidden=false;log('Connected.','ok');loadAll();
+}
+$('#saveTok').onclick=function(){var v=$('#tok').value.trim();if(!v){log('Paste the key first.','err');return;}localStorage.setItem('falconer_token',v);$('#tok').value='';enter();};
+$('#forgetTok').onclick=function(){localStorage.removeItem('falconer_token');$('#app').hidden=true;$('#gate').hidden=false;log('Key removed from this device.');};
+document.querySelectorAll('#tabs button').forEach(function(b){b.onclick=function(){
+ document.querySelectorAll('#tabs button').forEach(function(x){x.classList.toggle('on',x===b);});
+ ['articles','aph','soft','sup'].forEach(function(n){$('#t_'+n).hidden=(n!==b.dataset.t);});
+};});
+
+/* ---- articles ---- */
+var editingSlug=null,SECT={metaphysics:'I. Metaphysics & Meaning',power:'II. Power & Persuasion',media:'III. Media & Myth'};
+function plainToHtml(txt){
+ var out=[];
+ txt.replace(/\r/g,'').split(/\n\s*\n/).forEach(function(p){
+  p=p.trim();if(!p)return;
+  if(p==='*'||p==='***'||p==='---'){out.push('<p class="sep">*</p>');return;}
+  var m=p.match(/^(#{2,3})\s+(.+)$/);
+  if(m){var tag='h'+m[1].length;out.push('<'+tag+'>'+esc(m[2])+'</'+tag+'>');return;}
+  out.push('<p>'+p.split('\n').map(inl).join('<br>')+'</p>');
+ });
+ return out.join('');
+}
+function currentBodyHtml(){var v=$('#a_body').value;return $('#a_fmt').value==='html'?v.trim():plainToHtml(v);}
+function resizeImage(file){return new Promise(function(res,rej){
+ var img=new Image(),u=URL.createObjectURL(file);
+ img.onload=function(){var M=1250,w=img.width,h=img.height,s=Math.min(1,M/Math.max(w,h));
+  var c=document.createElement('canvas');c.width=Math.round(w*s);c.height=Math.round(h*s);
+  var x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(img,0,0,c.width,c.height);
+  c.toBlob(function(b){b.arrayBuffer().then(function(ab){URL.revokeObjectURL(u);res(new Uint8Array(ab));});},'image/jpeg',0.88);};
+ img.onerror=function(){rej(new Error('Could not read that image.'));};
+ img.src=u;});}
+function clearArticle(){editingSlug=null;$('#a_mode').textContent='New article';['a_title','a_ex','a_body','a_slug'].forEach(function(i){$('#'+i).value='';});$('#a_date').value=today();$('#a_feat').checked=false;$('#a_fmt').value='plain';$('#a_img').value='';$('#a_preview').hidden=true;}
+$('#a_clear').onclick=clearArticle;
+$('#a_prev').onclick=function(){var p=$('#a_preview');p.innerHTML=currentBodyHtml();p.hidden=false;};
+$('#a_pub').onclick=async function(){
+ var btn=$('#a_pub'),title=$('#a_title').value.trim();
+ if(!title){log('Give the article a title.','err');return;}
+ var bodyHtml=currentBodyHtml();
+ if(!strip(bodyHtml)){log('The text is empty.','err');return;}
+ var slug=slugify($('#a_slug').value.trim()||title);
+ if(!slug){log('Could not make a web address from that title.','err');return;}
+ var ex=$('#a_ex').value.trim();
+ if(!ex){var fp=strip((bodyHtml.match(/<p>[\s\S]*?<\/p>/)||[''])[0]);ex=fp.length>220?fp.slice(0,217).replace(/\s+\S*$/,'')+'...':fp;}
+ var post={slug:slug,title:title,cat:$('#a_cat').value,date:$('#a_date').value||today(),featured:$('#a_feat').checked,excerpt:ex,body:bodyHtml};
+ busy(btn,true);
+ try{
+  var imgName=null;
+  if($('#a_img').files[0]){
+   log('Preparing the drawing...');
+   var bytes=await resizeImage($('#a_img').files[0]);imgName=slug+'.jpg';
+   var sha=await getSha(imgName);await putFile(imgName,bytesToB64(bytes),sha,'Add cover drawing for '+title);
+  }
+  log('Publishing...');
+  var nt=await editSite(function(t){
+   var arr=readPosts(t),i=-1,k;
+   for(k=0;k<arr.length;k++){if(arr[k].slug===(editingSlug||slug)){i=k;break;}}
+   if(i<0){for(k=0;k<arr.length;k++){if(arr[k].slug===slug){log('An article with that web address already exists - change the ending or edit that one.','err');throw new Error('Duplicate web address.');}}}
+   var old=i>=0?arr[i]:null;
+   if(old){for(var key in old){if(['slug','title','cat','date','featured','excerpt','body'].indexOf(key)<0)post[key]=old[key];}}
+   if(i>=0)arr[i]=post;else arr.unshift(post);
+   t=writePosts(t,arr);
+   var cv=readCover(t),ch=false;
+   if(imgName){cv[slug]=imgName;ch=true;}
+   if(editingSlug&&editingSlug!==slug&&cv[editingSlug]){if(!cv[slug])cv[slug]=cv[editingSlug];delete cv[editingSlug];ch=true;}
+   if(ch)t=writeCover(t,cv);
+   return t;
+  },(editingSlug?'Edit article: ':'Add article: ')+title);
+  try{var pj=null;try{pj=await getFile('posts.json');}catch(e2){}
+   await putFile('posts.json',textToB64(JSON.stringify(readPosts(nt),null,1)),pj&&pj.sha,'Update posts.json');}catch(e3){log('Article is published, but posts.json could not be updated: '+e3.message,'err');}
+  log('Published "'+title+'". It will be live at beholdthefalconer.com/#'+slug+' in about a minute.','ok');
+  clearArticle();loadArticles();
+ }catch(e){log(e.message,'err');}
+ busy(btn,false);
+};
+async function loadArticles(){
+ try{
+  var f=await getFile('index.html'),arr=readPosts(f.text).slice().sort(function(a,b){return a.date<b.date?1:-1;}),box=$('#a_list');
+  box.innerHTML='';
+  arr.forEach(function(p){
+   var d=document.createElement('div');d.className='item';
+   d.innerHTML='<div class="t"><b></b><small></small></div><div class="btns"></div>';
+   d.querySelector('b').textContent=(p.featured?'★ ':'')+p.title;
+   d.querySelector('small').textContent=p.date+' · '+(SECT[p.cat]||p.cat);
+   var bt=d.querySelector('.btns');
+   var e=document.createElement('button');e.className='alt sm';e.textContent='Edit';e.onclick=function(){
+    editingSlug=p.slug;$('#a_mode').textContent='Editing: '+p.title;$('#a_title').value=p.title;$('#a_cat').value=p.cat;$('#a_date').value=p.date;
+    $('#a_feat').checked=!!p.featured;$('#a_ex').value=p.excerpt||'';$('#a_fmt').value='html';$('#a_body').value=p.body;$('#a_slug').value=p.slug;$('#a_img').value='';
+    window.scrollTo({top:0,behavior:'smooth'});log('Loaded "'+p.title+'" for editing. Press Publish article to save your changes.');};
+   var s=document.createElement('button');s.className='alt sm';s.textContent=p.featured?'Unfeature':'Feature';s.onclick=async function(){
+    s.disabled=true;try{await editSite(function(t){var a=readPosts(t),q=a.filter(function(x){return x.slug===p.slug;})[0];if(!q)throw new Error('Not found.');q.featured=!q.featured;return writePosts(t,a);},'Toggle feature: '+p.title);log('Updated.','ok');loadArticles();}catch(er){log(er.message,'err');s.disabled=false;}};
+   var x=document.createElement('button');x.className='sm';x.textContent='Delete';x.onclick=async function(){
+    if(!confirm('Delete "'+p.title+'" from the site? This can be undone only from GitHub history.'))return;
+    x.disabled=true;try{var nt=await editSite(function(t){var a=readPosts(t).filter(function(q){return q.slug!==p.slug;});t=writePosts(t,a);var cv=readCover(t);if(cv[p.slug]){delete cv[p.slug];t=writeCover(t,cv);}return t;},'Delete article: '+p.title);
+     try{var pj=await getFile('posts.json');await putFile('posts.json',textToB64(JSON.stringify(readPosts(nt),null,1)),pj.sha,'Update posts.json');}catch(e4){}
+     log('Deleted "'+p.title+'".','ok');loadArticles();}catch(er){log(er.message,'err');x.disabled=false;}};
+   bt.appendChild(e);bt.appendChild(s);bt.appendChild(x);box.appendChild(d);
+  });
+ }catch(e){$('#a_list').textContent=e.message;}
+}
+
+/* ---- aphorisms ---- */
+$('#n_pub').onclick=async function(){
+ var txt=$('#n_text').value.trim();if(!txt){log('Type the aphorism first.','err');return;}
+ var btn=$('#n_pub');busy(btn,true);
+ try{await editSite(function(t){var a=readNotes(t);a.unshift({date:$('#n_date').value||today(),own:$('#n_own').value==='1',text:txt});return writeNotes(t,a);},'Add aphorism');
+  log('Aphorism published.','ok');$('#n_text').value='';loadNotes();}catch(e){log(e.message,'err');}
+ busy(btn,false);
+};
+async function loadNotes(){
+ try{var f=await getFile('index.html'),arr=readNotes(f.text),box=$('#n_list');box.innerHTML='';
+  arr.forEach(function(n,idx){
+   var d=document.createElement('div');d.className='item';d.innerHTML='<div class="t"><b></b><small></small></div><div class="btns"></div>';
+   d.querySelector('b').textContent=n.text;d.querySelector('small').textContent=n.date+' · '+(n.own?'Mine':'Quotation');
+   var x=document.createElement('button');x.className='sm';x.textContent='Delete';x.onclick=async function(){
+    if(!confirm('Delete this aphorism?'))return;x.disabled=true;
+    try{await editSite(function(t){var a=readNotes(t),i=-1,k;for(k=0;k<a.length;k++){if(a[k].text===n.text&&a[k].date===n.date){i=k;break;}}if(i<0)throw new Error('Not found.');a.splice(i,1);return writeNotes(t,a);},'Delete aphorism');log('Deleted.','ok');loadNotes();}catch(er){log(er.message,'err');x.disabled=false;}};
+   d.querySelector('.btns').appendChild(x);box.appendChild(d);});
+ }catch(e){$('#n_list').textContent=e.message;}
+}
+
+/* ---- software ---- */
+var editingProd=null;
+function clearProd(){editingProd=null;$('#s_mode').textContent='New software card';['s_name','s_plat','s_status','s_text','s_url','s_cta'].forEach(function(i){$('#'+i).value='';});}
+$('#s_clear').onclick=clearProd;
+$('#s_pub').onclick=async function(){
+ var p={name:$('#s_name').value.trim(),platform:$('#s_plat').value.trim(),status:$('#s_status').value.trim(),text:$('#s_text').value.trim(),url:$('#s_url').value.trim(),cta:$('#s_cta').value.trim()};
+ if(!p.name){log('Give it a name.','err');return;}
+ var btn=$('#s_pub');busy(btn,true);
+ try{await editSite(function(t){var a=readProducts(t),i=-1,k;
+   for(k=0;k<a.length;k++){if(a[k].name===(editingProd||p.name)){i=k;break;}}
+   if(i>=0){var old=a[i];for(var key in old){if(p[key]===undefined)p[key]=old[key];}a[i]=p;}else a.push(p);
+   return writeProducts(t,a);},(editingProd?'Edit':'Add')+' software: '+p.name);
+  log('Saved "'+p.name+'". Live in about a minute.','ok');clearProd();loadProducts();}catch(e){log(e.message,'err');}
+ busy(btn,false);
+};
+async function loadProducts(){
+ try{var f=await getFile('index.html'),arr=readProducts(f.text),box=$('#s_list');box.innerHTML='';
+  arr.forEach(function(p){
+   var d=document.createElement('div');d.className='item';d.innerHTML='<div class="t"><b></b><small></small></div><div class="btns"></div>';
+   d.querySelector('b').textContent=p.name;d.querySelector('small').textContent=[p.platform,p.status].filter(Boolean).join(' · ')+(p.url?'':' · no buy link');
+   var e=document.createElement('button');e.className='alt sm';e.textContent='Edit';e.onclick=function(){
+    editingProd=p.name;$('#s_mode').textContent='Editing: '+p.name;$('#s_name').value=p.name||'';$('#s_plat').value=p.platform||'';$('#s_status').value=p.status||'';$('#s_text').value=p.text||'';$('#s_url').value=p.url||'';$('#s_cta').value=p.cta||'';
+    window.scrollTo({top:0,behavior:'smooth'});log('Loaded "'+p.name+'". Change it and press Save software card.');};
+   var x=document.createElement('button');x.className='sm';x.textContent='Delete';x.onclick=async function(){
+    if(!confirm('Remove "'+p.name+'" from the Software page?'))return;x.disabled=true;
+    try{await editSite(function(t){var a=readProducts(t).filter(function(q){return q.name!==p.name;});return writeProducts(t,a);},'Remove software: '+p.name);log('Removed.','ok');loadProducts();}catch(er){log(er.message,'err');x.disabled=false;}};
+   var bt=d.querySelector('.btns');bt.appendChild(e);bt.appendChild(x);box.appendChild(d);});
+ }catch(e){$('#s_list').textContent=e.message;}
+}
+
+/* ---- support ---- */
+$('#u_pub').onclick=async function(){
+ var l={name:$('#u_name').value.trim(),url:$('#u_url').value.trim(),note:$('#u_note').value.trim()};
+ if(!l.name||!l.url){log('Add a name and a link.','err');return;}
+ var btn=$('#u_pub');busy(btn,true);
+ try{await editSite(function(t){var a=readSupport(t);a.push(l);return writeSupport(t,a);},'Add support link: '+l.name);
+  log('Support button added.','ok');['u_name','u_url','u_note'].forEach(function(i){$('#'+i).value='';});loadSupport();}catch(e){log(e.message,'err');}
+ busy(btn,false);
+};
+async function loadSupport(){
+ try{var f=await getFile('index.html'),arr=readSupport(f.text),box=$('#u_list');box.innerHTML='';
+  if(!arr.length){box.textContent='No support buttons yet.';return;}
+  arr.forEach(function(l){
+   var d=document.createElement('div');d.className='item';d.innerHTML='<div class="t"><b></b><small></small></div><div class="btns"></div>';
+   d.querySelector('b').textContent=l.name;d.querySelector('small').textContent=l.url;
+   var x=document.createElement('button');x.className='sm';x.textContent='Delete';x.onclick=async function(){
+    if(!confirm('Remove this support button?'))return;x.disabled=true;
+    try{await editSite(function(t){var a=readSupport(t).filter(function(q){return !(q.name===l.name&&q.url===l.url);});return writeSupport(t,a);},'Remove support link: '+l.name);log('Removed.','ok');loadSupport();}catch(er){log(er.message,'err');x.disabled=false;}};
+   d.querySelector('.btns').appendChild(x);box.appendChild(d);});
+ }catch(e){$('#u_list').textContent=e.message;}
+}
+
+function loadAll(){$('#a_date').value=$('#a_date').value||today();$('#n_date').value=$('#n_date').value||today();loadArticles();loadNotes();loadProducts();loadSupport();}
+$('#a_date').value=today();$('#n_date').value=today();
+if(localStorage.getItem('falconer_token'))enter();
+</script>
+</body>
+</html>
