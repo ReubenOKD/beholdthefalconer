@@ -211,6 +211,7 @@ footer .copy{border-top:1px solid #222;margin-top:30px;padding-top:16px;font-siz
   .topbar .right{display:none}
   .prevnext{grid-template-columns:1fr}
 }
+.article .body img{max-width:100%;height:auto;display:block;margin:1.2em auto}.article .body figure{margin:1.4em 0;text-align:center}.article .body figcaption{color:var(--muted);font-size:14px;margin-top:6px}.article .body blockquote{border-left:3px solid var(--accent2);margin:1.2em 0;padding:.2em 0 .2em 1em;color:var(--muted);font-style:italic}
 </style>
 </head>
 <body>
@@ -663,17 +664,11 @@ function archive(){
     <div class="panel">${Object.entries(groups).map(([m,ps])=>`<div class="arch-month" id="m-${m.replace(/\s/g,"-")}"><h3>${m}</h3>${ps.map(p=>`<a href="${link(p)}"><span>${esc(p.title)}${sampleTag(p)}</span><small>${esc(CATS[p.cat].name)} · ${fmt(p.date)}</small></a>`).join("")}</div>`).join("")}</div>
     </section>${sidebar()}</div>`;
 }
+const ABOUT_HTML = /*ABOUT_START*/"<p>Behold the Falconer is an independent publication devoted to serious, exploratory writing. It approaches philosophy, culture, religion, politics and media as connected fields — looking past the churn of commentary toward the assumptions, histories and symbols that give events their shape.<\/p>\n<h2>The name<\/h2>\n<p>The falconer is the one who trains the bird of prey to discipline, vigilance and return. The journal takes its temper from that image: watchful, exact, and patient.<\/p>\n<h2>Three fields of attention<\/h2>\n{{sections}}\n<h2>Contact<\/h2>\n<p>Follow and write to the journal on Substack: <a href=\"https://beholdthefalconer.substack.com\" style=\"color:var(--accent2)\">beholdthefalconer.substack.com<\/a>.<\/p>"/*ABOUT_END*/;
 function about(){
   return `<div class="mainrow" style="margin-top:24px"><section>
     <div class="pagehead"><h1>About / Contact</h1><p>Read the pattern, not only the event.</p></div>
-    <div class="panel article" style="max-width:none"><img src="falconer.jpg" alt="A peregrine falcon perched on a gloved hand before shelves of old books" style="display:block;width:100%;max-width:520px;height:auto;margin:0 auto 26px"><div class="body">
-      <p>Behold the Falconer is an independent publication devoted to serious, exploratory writing. It approaches philosophy, culture, religion, politics and media as connected fields — looking past the churn of commentary toward the assumptions, histories and symbols that give events their shape.</p>
-      <h2>The name</h2>
-      <p>The falconer is the one who trains the bird of prey to discipline, vigilance and return. The journal takes its temper from that image: watchful, exact, and patient.</p>
-      <h2>Three fields of attention</h2>
-      ${Object.values(CATS).map(c=>`<p><strong>${c.num} · ${esc(c.name)}.</strong> ${esc(c.blurb)}</p>`).join("")}
-      <h2>Contact</h2>
-      <p>Follow and write to the journal on Substack: <a href="https://beholdthefalconer.substack.com" style="color:var(--accent2)">beholdthefalconer.substack.com</a>.</p>
+    <div class="panel article" style="max-width:none"><img src="falconer.jpg" alt="A peregrine falcon perched on a gloved hand before shelves of old books" style="display:block;width:100%;max-width:520px;height:auto;margin:0 auto 26px"><div class="body">${ABOUT_HTML.replace("{{sections}}", Object.values(CATS).map(c=>`<p><strong>${c.num} · ${esc(c.name)}.</strong> ${esc(c.blurb)}</p>`).join(""))}
     </div></div></section>${sidebar()}</div>`;
 }
 const PRODUCTS = [

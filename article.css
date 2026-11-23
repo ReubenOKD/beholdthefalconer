@@ -15,3 +15,5 @@ a{color:inherit;text-decoration:none}a:hover{color:#c9a24a}
 .more ul{list-style:none;padding:0;margin:0 0 16px}.more li{padding:8px 0;border-bottom:1px solid #333;font-family:'Oswald',Impact,sans-serif;font-size:17px}
 .btn{display:inline-block;border:1px solid #555;padding:7px 16px;font-family:'Oswald',Impact,sans-serif}.btn:hover{background:#2f6fb0;border-color:#2f6fb0;color:#fff}
 footer{background:#0c0c0c;margin-top:40px;padding:26px 20px;color:#a29d93;text-align:center;font-size:14px;display:grid;gap:8px}
+
+.body img{max-width:100%;height:auto;display:block;margin:1.2em auto}.body figure{margin:1.4em 0;text-align:center}.body figcaption{color:#a29d93;font-size:14px;margin-top:6px}.body blockquote{border-left:3px solid #c9a24a;margin:1.2em 0;padding:.2em 0 .2em 1em;color:#a29d93;font-style:italic}

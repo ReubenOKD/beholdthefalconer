@@ -39,6 +39,18 @@ button:disabled{opacity:.5;cursor:wait}
 .preview{background:#141414;border:1px solid var(--line);border-radius:6px;padding:18px;margin-top:12px;max-height:520px;overflow:auto;font-family:Georgia,serif;font-size:18px;line-height:1.7}
 .preview h2{color:var(--text);font-size:24px;text-transform:none;letter-spacing:0;margin:1.4em 0 .5em}
 .preview p.sep{text-align:center;color:var(--gold);letter-spacing:.4em}
+.tb{display:flex;flex-wrap:wrap;gap:4px;background:var(--p2);border:1px solid var(--line);border-bottom:0;border-radius:4px 4px 0 0;padding:6px}
+.tb button{background:var(--p1);border:1px solid var(--line);color:var(--text);padding:6px 10px;font-size:14px;font-weight:600;border-radius:3px}
+.tb button:hover{border-color:var(--gold)}
+.rich{min-height:380px;max-height:70vh;overflow:auto;background:#141414;border:1px solid var(--line);border-radius:0 0 4px 4px;padding:14px 16px;font-family:Georgia,serif;font-size:18px;line-height:1.7;outline:none}
+.rich:focus{border-color:var(--gold)}
+.rich h2{font-size:24px;margin:1.2em 0 .4em;color:var(--text);text-transform:none;letter-spacing:0}.rich h3{font-size:20px;margin:1em 0 .4em}
+.rich blockquote,.preview blockquote{border-left:3px solid var(--gold);margin:1em 0;padding-left:1em;color:var(--mut);font-style:italic}
+.rich p.sep{text-align:center;color:var(--gold);letter-spacing:.4em}
+.rich img,.preview img{max-width:100%;height:auto;display:block;margin:1em auto}
+.rich figure,.preview figure{margin:1em 0;text-align:center}
+.rich figcaption,.preview figcaption{color:var(--mut);font-size:14px}
+.rich a{color:#7fa9d6}
 [hidden]{display:none!important}
 code{background:var(--p2);padding:1px 5px;border-radius:3px}
 </style>
@@ -62,6 +74,7 @@ code{background:var(--p2);padding:1px 5px;border-radius:3px}
   <button data-t="aph">Aphorisms</button>
   <button data-t="soft">Software</button>
   <button data-t="sup">Support</button>
+<button data-t="pages">About page</button>
  </div>
 
  <div id="t_articles">
@@ -76,9 +89,9 @@ code{background:var(--p2);padding:1px 5px;border-radius:3px}
    <label><input type="checkbox" id="a_feat"> Show in the Main Feature slider on the home page</label>
    <label for="a_ex">Short description (optional - made from the first paragraph if empty)</label><textarea id="a_ex" style="min-height:64px"></textarea>
    <label for="a_fmt">How you are typing it</label>
-   <select id="a_fmt"><option value="plain">Plain text (easy)</option><option value="html">HTML (for editing an existing article)</option></select>
+   <select id="a_fmt"><option value="rich">Editor with buttons (easiest)</option><option value="plain">Plain text</option><option value="html">HTML (for editing an existing article)</option></select>
    <p class="hint" id="a_fmthint">Leave a blank line between paragraphs. A line with only <code>*</code> makes a section break. Start a line with <code>## </code> for a chapter heading, or <code>### </code> for a smaller one. Put <code>*asterisks*</code> around words to italicise them.</p>
-   <label for="a_body">Text</label><textarea id="a_body" class="big"></textarea>
+   <label for="a_body">Text</label><textarea id="a_body" class="big"></textarea><div class="tb" data-ed="a"><button type="button" data-c="bold" title="Bold"><b>B</b></button><button type="button" data-c="italic" title="Italic"><i>I</i></button><button type="button" data-c="h2">Heading</button><button type="button" data-c="h3">Subheading</button><button type="button" data-c="p">Normal text</button><button type="button" data-c="quote">Quote</button><button type="button" data-c="link">Link</button><button type="button" data-c="unlink">Remove link</button><button type="button" data-c="sep">Section break *</button><button type="button" data-c="img">Insert image</button><button type="button" data-c="undo">Undo</button></div><div class="rich" id="a_rich" contenteditable="true"></div><input type="file" id="img_pick" accept="image/*" hidden>
    <div class="row">
     <div><label for="a_img">Cover drawing (optional - leave empty for the automatic cover)</label><input type="file" id="a_img" accept="image/*"></div>
     <div><label for="a_slug">Web address ending</label><input type="text" id="a_slug" placeholder="made from the title"></div>
@@ -136,6 +149,15 @@ code{background:var(--p2);padding:1px 5px;border-radius:3px}
   <h2>On the Support page</h2>
   <div class="panel" id="u_list">Loading...</div>
  </div>
+
+<div id="t_pages" hidden>
+<div class="panel">
+<b>About / Contact page</b>
+<p class="hint">Change the words on the About page with the buttons, just like an article. <code>{{sections}}</code> marks where the list of the three sections appears: keep it, move it or delete it. The falcon picture at the top stays as it is.</p>
+<div class="tb" data-ed="p"><button type="button" data-c="bold" title="Bold"><b>B</b></button><button type="button" data-c="italic" title="Italic"><i>I</i></button><button type="button" data-c="h2">Heading</button><button type="button" data-c="h3">Subheading</button><button type="button" data-c="p">Normal text</button><button type="button" data-c="quote">Quote</button><button type="button" data-c="link">Link</button><button type="button" data-c="unlink">Remove link</button><button type="button" data-c="sep">Section break *</button><button type="button" data-c="img">Insert image</button><button type="button" data-c="undo">Undo</button></div><div class="rich" id="p_rich" contenteditable="true">Loading...</div>
+<p><button id="p_pub">Publish About page</button> <button class="alt" id="p_reload">Throw away my changes</button></p>
+</div>
+</div>
 </div>
 
 <div id="log"></div>
@@ -287,7 +309,7 @@ $('#saveTok').onclick=function(){var v=$('#tok').value.trim();if(!v){log('Paste 
 $('#forgetTok').onclick=function(){localStorage.removeItem('falconer_token');$('#app').hidden=true;$('#gate').hidden=false;log('Key removed from this device.');};
 document.querySelectorAll('#tabs button').forEach(function(b){b.onclick=function(){
  document.querySelectorAll('#tabs button').forEach(function(x){x.classList.toggle('on',x===b);});
- ['articles','aph','soft','sup'].forEach(function(n){$('#t_'+n).hidden=(n!==b.dataset.t);});
+ ['articles','aph','soft','sup','pages'].forEach(function(n){$('#t_'+n).hidden=(n!==b.dataset.t);});
 };});
 
 /* ---- articles ---- */
@@ -303,7 +325,59 @@ function plainToHtml(txt){
  });
  return out.join('');
 }
-function currentBodyHtml(){var v=$('#a_body').value;return $('#a_fmt').value==='html'?v.trim():plainToHtml(v);}
+var IMGMAP={},lastFmt='rich',savedRange=null,imgTarget=null;
+function cleanHtml(h){
+var d=document.createElement('div'),e;d.innerHTML=h;
+d.querySelectorAll('img').forEach(function(im){var s=im.getAttribute('src');if(IMGMAP[s])im.setAttribute('src',IMGMAP[s]);});
+d.querySelectorAll('script,style,meta,link').forEach(function(x){x.remove();});
+while((e=d.querySelector('div'))){var p=document.createElement('p');p.innerHTML=e.innerHTML;e.replaceWith(p);}
+while((e=d.querySelector('span,font'))){e.replaceWith.apply(e,[].slice.call(e.childNodes));}
+while((e=d.querySelector('b'))){var s1=document.createElement('strong');s1.innerHTML=e.innerHTML;e.replaceWith(s1);}
+while((e=d.querySelector('i'))){var s2=document.createElement('em');s2.innerHTML=e.innerHTML;e.replaceWith(s2);}
+d.querySelectorAll('*').forEach(function(x){[].slice.call(x.attributes).forEach(function(a){var n=a.name;
+if(['href','src','alt','target','rel'].indexOf(n)>=0)return;
+if(n==='class'&&!/Apple-/.test(a.value))return;
+x.removeAttribute(n);});});
+[].slice.call(d.childNodes).forEach(function(n){
+if(n.nodeType===3){if(n.textContent.trim()){var p=document.createElement('p');n.replaceWith(p);p.appendChild(n);}else n.remove();}
+else if(n.nodeName==='BR')n.remove();});
+d.querySelectorAll('p').forEach(function(x){if(!x.textContent.trim()&&!x.querySelector('img'))x.remove();});
+return d.innerHTML.replace(/&nbsp;/g,' ').trim();
+}
+function htmlToPlain(h){return h.replace(/<p class="sep">[\s\S]*?<\/p>/g,'\n\n*\n\n').replace(/<h2>([\s\S]*?)<\/h2>/g,'\n\n## $1\n\n').replace(/<h3>([\s\S]*?)<\/h3>/g,'\n\n### $1\n\n').replace(/<\/?em>/g,'*').replace(/<br\s*\/?>/g,'\n').replace(/<\/p>|<\/blockquote>|<\/figure>/g,'\n\n').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/\n{3,}/g,'\n\n').trim();}
+function currentBodyHtml(){var f=$('#a_fmt').value,v=$('#a_body').value;if(f==='rich')return cleanHtml($('#a_rich').innerHTML);return f==='html'?v.trim():plainToHtml(v);}
+function showFmt(){var f=$('#a_fmt').value;$('#a_body').hidden=(f==='rich');$('#a_rich').hidden=(f!=='rich');$('.tb[data-ed=a]').hidden=(f!=='rich');$('#a_fmthint').hidden=(f!=='plain');}
+$('#a_fmt').onchange=function(){var f=$('#a_fmt').value,h;
+if(lastFmt==='rich')h=cleanHtml($('#a_rich').innerHTML);else if(lastFmt==='html')h=$('#a_body').value.trim();else h=plainToHtml($('#a_body').value);
+if(f==='rich')$('#a_rich').innerHTML=h;else if(f==='html')$('#a_body').value=h;else $('#a_body').value=htmlToPlain(h);
+lastFmt=f;showFmt();};
+document.querySelectorAll('.tb').forEach(function(tb){
+tb.addEventListener('mousedown',function(ev){if(ev.target.closest('button'))ev.preventDefault();});
+tb.addEventListener('click',function(ev){var b=ev.target.closest('button');if(!b)return;var ed=$('#'+tb.dataset.ed+'_rich'),c=b.dataset.c;ed.focus();
+if(c==='bold'||c==='italic'||c==='undo'||c==='unlink')document.execCommand(c);
+else if(c==='h2'||c==='h3'||c==='p')document.execCommand('formatBlock',false,'<'+c+'>');
+else if(c==='quote')document.execCommand('formatBlock',false,'<blockquote>');
+else if(c==='link'){var u=prompt('Link address (starting with https://)');if(u)document.execCommand('createLink',false,u.trim());}
+else if(c==='sep')insertBlockAfter(ed,'<p class="sep">*</p><p><br></p>');
+else if(c==='img'){var s=getSelection();savedRange=s.rangeCount?s.getRangeAt(0).cloneRange():null;imgTarget=ed;$('#img_pick').value='';$('#img_pick').click();}
+});});
+$('#img_pick').onchange=async function(){var f=this.files[0];if(!f||!imgTarget)return;
+var cap=prompt('Caption under the picture (optional - leave empty for none)')||'';
+try{log('Uploading picture...');var bytes=await resizeImage(f);
+var base=slugify((tabIsPages()?'about':$('#a_title').value)||'image')||'image',name='img/'+base+'-'+Date.now()+'.jpg';
+await putFile(name,bytesToB64(bytes),null,'Add image '+name);
+imgTarget.focus();var s=getSelection();if(savedRange){s.removeAllRanges();s.addRange(savedRange);}
+insertBlockAfter(imgTarget,'<figure><img src="/'+name+'" alt="'+esc(cap||'')+'">'+(cap?'<figcaption>'+esc(cap)+'</figcaption>':'')+'</figure><p><br></p>');
+var im=imgTarget.querySelector('img[src="/'+name+'"]');if(im){var ou=URL.createObjectURL(f);IMGMAP[ou]='/'+name;im.setAttribute('src',ou);}
+log('Picture added. It appears on the site when you publish.','ok');}catch(er){log(er.message,'err');}};
+function insertBlockAfter(ed,html){var s=getSelection(),n=s.rangeCount?s.getRangeAt(0).startContainer:null;
+while(n&&n.parentNode!==ed)n=n.parentNode;
+var t=document.createElement('div');t.innerHTML=html;var last=null,frag=document.createDocumentFragment();
+while(t.firstChild){last=t.firstChild;frag.appendChild(last);}
+if(n&&n.nextSibling)ed.insertBefore(frag,n.nextSibling);else ed.appendChild(frag);
+if(last){var r=document.createRange();r.selectNodeContents(last);r.collapse(true);s.removeAllRanges();s.addRange(r);}}
+function tabIsPages(){return !$('#t_pages').hidden;}
+showFmt();
 function resizeImage(file){return new Promise(function(res,rej){
  var img=new Image(),u=URL.createObjectURL(file);
  img.onload=function(){var M=1250,w=img.width,h=img.height,s=Math.min(1,M/Math.max(w,h));
@@ -312,9 +386,9 @@ function resizeImage(file){return new Promise(function(res,rej){
   c.toBlob(function(b){b.arrayBuffer().then(function(ab){URL.revokeObjectURL(u);res(new Uint8Array(ab));});},'image/jpeg',0.88);};
  img.onerror=function(){rej(new Error('Could not read that image.'));};
  img.src=u;});}
-function clearArticle(){editingSlug=null;$('#a_mode').textContent='New article';['a_title','a_ex','a_body','a_slug'].forEach(function(i){$('#'+i).value='';});$('#a_date').value=today();$('#a_feat').checked=false;$('#a_fmt').value='plain';$('#a_img').value='';$('#a_preview').hidden=true;}
+function clearArticle(){editingSlug=null;$('#a_mode').textContent='New article';['a_title','a_ex','a_body','a_slug'].forEach(function(i){$('#'+i).value='';});$('#a_date').value=today();$('#a_feat').checked=false;$('#a_fmt').value='rich';lastFmt='rich';$('#a_rich').innerHTML='';showFmt();$('#a_img').value='';$('#a_preview').hidden=true;}
 $('#a_clear').onclick=clearArticle;
-$('#a_prev').onclick=function(){var p=$('#a_preview');p.innerHTML=currentBodyHtml();p.hidden=false;};
+$('#a_prev').onclick=function(){var p=$('#a_preview');p.innerHTML=$('#a_fmt').value==='rich'?$('#a_rich').innerHTML:currentBodyHtml();p.hidden=false;};
 $('#a_pub').onclick=async function(){
  var btn=$('#a_pub'),title=$('#a_title').value.trim();
  if(!title){log('Give the article a title.','err');return;}
@@ -367,7 +441,7 @@ async function loadArticles(){
    var bt=d.querySelector('.btns');
    var e=document.createElement('button');e.className='alt sm';e.textContent='Edit';e.onclick=function(){
     editingSlug=p.slug;$('#a_mode').textContent='Editing: '+p.title;$('#a_title').value=p.title;$('#a_cat').value=p.cat;$('#a_date').value=p.date;
-    $('#a_feat').checked=!!p.featured;$('#a_ex').value=p.excerpt||'';$('#a_fmt').value='html';$('#a_body').value=p.body;$('#a_slug').value=p.slug;$('#a_img').value='';
+    $('#a_feat').checked=!!p.featured;$('#a_ex').value=p.excerpt||'';$('#a_fmt').value='rich';lastFmt='rich';$('#a_rich').innerHTML=p.body;$('#a_body').value='';showFmt();$('#a_slug').value=p.slug;$('#a_img').value='';
     window.scrollTo({top:0,behavior:'smooth'});log('Loaded "'+p.title+'" for editing. Press Publish article to save your changes.');};
    var s=document.createElement('button');s.className='alt sm';s.textContent=p.featured?'Unfeature':'Feature';s.onclick=async function(){
     s.disabled=true;try{await editSite(function(t){var a=readPosts(t),q=a.filter(function(x){return x.slug===p.slug;})[0];if(!q)throw new Error('Not found.');q.featured=!q.featured;return writePosts(t,a);},'Toggle feature: '+p.title);log('Updated.','ok');loadArticles();}catch(er){log(er.message,'err');s.disabled=false;}};
@@ -453,7 +527,16 @@ async function loadSupport(){
  }catch(e){$('#u_list').textContent=e.message;}
 }
 
-function loadAll(){$('#a_date').value=$('#a_date').value||today();$('#n_date').value=$('#n_date').value||today();loadArticles();loadNotes();loadProducts();loadSupport();}
+var AS='/*ABOUT_START*/',AE='/*ABOUT_END*/';
+function readAbout(t){var a=t.indexOf(AS),b=t.indexOf(AE);if(a<0||b<0)throw new Error('Cannot find the About text.');return JSON.parse(t.slice(a+AS.length,b));}
+function writeAbout(t,h){var a=t.indexOf(AS),b=t.indexOf(AE);if(a<0||b<0)throw new Error('Cannot find the About text.');return t.slice(0,a+AS.length)+JSON.stringify(h).replace(/<\//g,'<\\/')+t.slice(b);}
+async function loadAbout(){try{var f=await getFile('index.html');$('#p_rich').innerHTML=readAbout(f.text);}catch(e){$('#p_rich').textContent=e.message;}}
+$('#p_reload').onclick=function(){loadAbout();log('Reloaded the About text from the site.');};
+$('#p_pub').onclick=async function(){var btn=$('#p_pub');busy(btn,true);
+try{var h=cleanHtml($('#p_rich').innerHTML);if(!h){throw new Error('The About text is empty.');}
+await editSite(function(t){return writeAbout(t,h);},'Edit About page');log('About page published. Live in about a minute.','ok');}catch(e){log(e.message,'err');}
+busy(btn,false);};
+function loadAll(){$('#a_date').value=$('#a_date').value||today();$('#n_date').value=$('#n_date').value||today();loadArticles();loadNotes();loadProducts();loadSupport();loadAbout();}
 $('#a_date').value=today();$('#n_date').value=today();
 if(localStorage.getItem('falconer_token'))enter();
 </script>
